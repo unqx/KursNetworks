@@ -21,48 +21,46 @@ namespace KursNetworks
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            foreach (string port in PhysLayer.scanPorts())
-            {
-                comboBox1.Items.Add(port);
-            }
-
-            button1.Enabled = false;
-            
+           
         }
 
-        // Кнопка "выбрать"
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var connection = new SerialPort();
-            connection.PortName = comboBox1.Text;
-            connection.Open();
-            textBox1.Text += "Established connection on " + connection.PortName;
-            button1.Enabled = false;
-            comboBox1.Enabled = false;
-        }
-
+       
         private void textBox1_DoubleClick(object sender, EventArgs e)
         {
             if (PhysLayer.IsOpen())
-                textBox1.Text += "TRUE!";
+                textBox1.Text += PhysLayer.GetDataBits() + " " + PhysLayer.GetSpeed() + " / " + PhysLayer.GetPortName() + "\r\n";
             else
-                textBox1.Text += "FALSE!";
+                textBox1.Text += "FALSE\r\n";
 
         }
 
-        // Toogle для кнопки "выбрать"
-        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if(comboBox1.Text != "")
-                button1.Enabled = true;
-            else
-                button1.Enabled = false;
-        }
-
+       
         private void button2_Click(object sender, EventArgs e)
         {
+            bool prev = PhysLayer.IsOpen();
+            string port = PhysLayer.GetPortName();
             ConnectionSettings SettingsForm = new ConnectionSettings();
             SettingsForm.ShowDialog();
+
+            // Чисто для прикола)))
+            if (PhysLayer.IsOpen())
+            {
+                label1.Text = "Подключен к порту " + PhysLayer.GetPortName();
+                if (!prev)
+                    textBox1.Text += "Etsablished connection via " + PhysLayer.GetPortName() + " with parameters: speed = " + PhysLayer.GetSpeed() + "\r\n";
+                textBox1.SelectionStart = textBox1.TextLength;
+                textBox1.ScrollToCaret();
+            }
+            
+            else
+            {
+                label1.Text = "Нет подключения к COM-порту!";
+                if(prev)
+                    textBox1.Text += "Connection via " + port + " was dropped.\r\n";
+                textBox1.SelectionStart = textBox1.TextLength;
+                textBox1.ScrollToCaret();
+            }
+                
         }
     }
 }
