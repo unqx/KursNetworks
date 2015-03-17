@@ -7,3 +7,4 @@ c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\ob
 c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.csproj.GenerateResource.Cache
 c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.exe
 c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.pdb
+C:\Users\Alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.ConnectionSettings.resources
