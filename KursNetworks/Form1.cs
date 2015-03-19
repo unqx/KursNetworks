@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.IO;
 
 namespace KursNetworks
 {
     public partial class Form1 : Form
     {
-        static PhysLayer Layer = new PhysLayer();
+      
         public Form1()
         {
             InitializeComponent();
@@ -60,7 +61,13 @@ namespace KursNetworks
                 textBox1.SelectionStart = textBox1.TextLength;
                 textBox1.ScrollToCaret();
             }
-                
+
+        }
+
+        private void FileChoice_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog search = new OpenFileDialog();
+            DialogResult result = search.ShowDialog();
         }
     }
 }

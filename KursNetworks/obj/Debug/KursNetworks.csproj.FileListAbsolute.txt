@@ -8,3 +8,13 @@ c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\ob
 c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.exe
 c:\users\alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.pdb
 C:\Users\Alex\documents\visual studio 2013\Projects\KursNetworks\KursNetworks\obj\Debug\KursNetworks.ConnectionSettings.resources
+C:\Users\ITPC-13\KursNetworks\bin\Debug\KursNetworks.exe.config
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.exe
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.pdb
+C:\Users\ITPC-13\KursNetworks\bin\Debug\KursNetworks.exe
+C:\Users\ITPC-13\KursNetworks\bin\Debug\KursNetworks.pdb
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.csprojResolveAssemblyReference.cache
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.ConnectionSettings.resources
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.Form1.resources
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.Properties.Resources.resources
+C:\Users\ITPC-13\KursNetworks\obj\Debug\KursNetworks.csproj.GenerateResource.Cache
