@@ -13,6 +13,8 @@ namespace KursNetworks
 {
     public partial class Form1 : Form
     {
+        static string a;
+
         static PhysLayer Layer = new PhysLayer();
         public Form1()
         {
@@ -21,7 +23,7 @@ namespace KursNetworks
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+            
         }
 
        
@@ -61,6 +63,23 @@ namespace KursNetworks
                 textBox1.ScrollToCaret();
             }
                 
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string a = PhysLayer.str;
+            var result = MessageBox.Show(a, "DATA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void DBUTTON1_Click(object sender, EventArgs e)
+        {
+            if(!backgroundWorker1.IsBusy)
+                backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void DBUTTON2_Click(object sender, EventArgs e)
+        {
+            PhysLayer.SendBits();
         }
     }
 }

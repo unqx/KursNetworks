@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Windows.Forms;
+using System.IO;
 
 namespace KursNetworks
 {
@@ -12,10 +13,40 @@ namespace KursNetworks
     {
         private static SerialPort serialPort = new SerialPort();
 
+        public static string str { get; set; }
+
         // Скан портов
         public static string[] scanPorts()
         {
             return SerialPort.GetPortNames();
+        }
+
+
+        // Чтение порта
+        public static void Listen(byte[] info)
+        {
+                
+        }
+
+        public static byte[] ReadByteArrayFromFile(string fileName)
+        {
+            byte[] buff = null;
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            long numBytes = new FileInfo(fileName).Length;
+            buff = br.ReadBytes((int)numBytes);
+            return buff;
+        }
+
+
+        public static void SendBits()
+        {
+            if (IsOpen())
+            {
+                byte[] info = ReadByteArrayFromFile("C:\\Users\\Alex\\Desktop\\key.txt");
+                serialPort.Write(info, 0, 50);
+            }
+                
         }
 
         public static void EstablishConnection(string name, int rate, int dataBits, StopBits S, Parity P)
@@ -28,8 +59,10 @@ namespace KursNetworks
 
             try
             {
+                serialPort.DataReceived += serialPort_DataReceived;
                 serialPort.Open();
             }
+
             catch(System.UnauthorizedAccessException)
             {
                 const string message = "Доступ к COM-порту закрыт!";
@@ -38,6 +71,14 @@ namespace KursNetworks
             }
             
         }
+
+        private static void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort sp = (SerialPort)sender;
+            string message = sp.ReadExisting();
+            var result = MessageBox.Show(message, "ATTENTION", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
 
         public static void DropConnection()
         {

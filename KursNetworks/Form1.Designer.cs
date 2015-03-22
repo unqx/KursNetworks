@@ -32,6 +32,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.DBUTTON1 = new System.Windows.Forms.Button();
+            this.DBUTTON2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1
@@ -77,12 +80,38 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Отсутствует подключение к COM-порту!";
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
+            // DBUTTON1
+            // 
+            this.DBUTTON1.Location = new System.Drawing.Point(388, 218);
+            this.DBUTTON1.Name = "DBUTTON1";
+            this.DBUTTON1.Size = new System.Drawing.Size(132, 55);
+            this.DBUTTON1.TabIndex = 7;
+            this.DBUTTON1.Text = "LISTEN";
+            this.DBUTTON1.UseVisualStyleBackColor = true;
+            this.DBUTTON1.Click += new System.EventHandler(this.DBUTTON1_Click);
+            // 
+            // DBUTTON2
+            // 
+            this.DBUTTON2.Location = new System.Drawing.Point(542, 218);
+            this.DBUTTON2.Name = "DBUTTON2";
+            this.DBUTTON2.Size = new System.Drawing.Size(150, 55);
+            this.DBUTTON2.TabIndex = 8;
+            this.DBUTTON2.Text = "SEND BITS";
+            this.DBUTTON2.UseVisualStyleBackColor = true;
+            this.DBUTTON2.Click += new System.EventHandler(this.DBUTTON2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(704, 353);
+            this.Controls.Add(this.DBUTTON2);
+            this.Controls.Add(this.DBUTTON1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
@@ -101,6 +130,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button DBUTTON1;
+        private System.Windows.Forms.Button DBUTTON2;
     }
 }
 
