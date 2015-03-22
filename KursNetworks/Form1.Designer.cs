@@ -32,13 +32,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-<<<<<<< HEAD
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.DBUTTON1 = new System.Windows.Forms.Button();
             this.DBUTTON2 = new System.Windows.Forms.Button();
-=======
             this.FileChoice = new System.Windows.Forms.Button();
->>>>>>> a1a1c63c026598eb7651cec3894de113e680df89
             this.SuspendLayout();
             // 
             // textBox1
@@ -84,7 +81,6 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Отсутствует подключение к COM-порту!";
             // 
-<<<<<<< HEAD
             // backgroundWorker1
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
@@ -108,7 +104,6 @@
             this.DBUTTON2.Text = "SEND BITS";
             this.DBUTTON2.UseVisualStyleBackColor = true;
             this.DBUTTON2.Click += new System.EventHandler(this.DBUTTON2_Click);
-=======
             // FileChoice
             // 
             this.FileChoice.Location = new System.Drawing.Point(26, 130);
@@ -118,21 +113,17 @@
             this.FileChoice.Text = "Выбрать файл";
             this.FileChoice.UseVisualStyleBackColor = true;
             this.FileChoice.Click += new System.EventHandler(this.FileChoice_Click);
->>>>>>> a1a1c63c026598eb7651cec3894de113e680df89
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-<<<<<<< HEAD
             this.ClientSize = new System.Drawing.Size(704, 353);
             this.Controls.Add(this.DBUTTON2);
             this.Controls.Add(this.DBUTTON1);
-=======
             this.ClientSize = new System.Drawing.Size(704, 313);
             this.Controls.Add(this.FileChoice);
->>>>>>> a1a1c63c026598eb7651cec3894de113e680df89
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
@@ -152,13 +143,12 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label1;
-<<<<<<< HEAD
+
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button DBUTTON1;
         private System.Windows.Forms.Button DBUTTON2;
-=======
+
         private System.Windows.Forms.Button FileChoice;
->>>>>>> a1a1c63c026598eb7651cec3894de113e680df89
     }
 }
 

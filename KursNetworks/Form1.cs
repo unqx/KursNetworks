@@ -14,13 +14,11 @@ namespace KursNetworks
 {
     public partial class Form1 : Form
     {
-<<<<<<< HEAD
+
         static string a;
 
         static PhysLayer Layer = new PhysLayer();
-=======
-      
->>>>>>> a1a1c63c026598eb7651cec3894de113e680df89
+
         public Form1()
         {
             InitializeComponent();
