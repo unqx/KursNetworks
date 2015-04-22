@@ -32,10 +32,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.DBUTTON1 = new System.Windows.Forms.Button();
-            this.DBUTTON2 = new System.Windows.Forms.Button();
-            this.FileChoice = new System.Windows.Forms.Button();
+            this.ConnectionWorker = new System.ComponentModel.BackgroundWorker();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBox1
@@ -55,15 +53,15 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(334, 34);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 13);
+            this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Dev Console";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(26, 82);
+            this.button2.Location = new System.Drawing.Point(15, 113);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(222, 29);
+            this.button2.Size = new System.Drawing.Size(316, 42);
             this.button2.TabIndex = 5;
             this.button2.Text = "Настройки соединения";
             this.button2.UseVisualStyleBackColor = true;
@@ -75,55 +73,34 @@
             this.label1.BackColor = System.Drawing.SystemColors.Control;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.label1.Location = new System.Drawing.Point(22, 49);
+            this.label1.Location = new System.Drawing.Point(12, 49);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(291, 18);
             this.label1.TabIndex = 6;
             this.label1.Text = "Отсутствует подключение к COM-порту!";
             // 
-            // backgroundWorker1
+            // ConnectionWorker
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.ConnectionWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ConnectionWorker_DoWork);
             // 
-            // DBUTTON1
+            // label3
             // 
-            this.DBUTTON1.Location = new System.Drawing.Point(388, 218);
-            this.DBUTTON1.Name = "DBUTTON1";
-            this.DBUTTON1.Size = new System.Drawing.Size(132, 55);
-            this.DBUTTON1.TabIndex = 7;
-            this.DBUTTON1.Text = "LISTEN";
-            this.DBUTTON1.UseVisualStyleBackColor = true;
-            this.DBUTTON1.Click += new System.EventHandler(this.DBUTTON1_Click);
-            // 
-            // DBUTTON2
-            // 
-            this.DBUTTON2.Location = new System.Drawing.Point(542, 218);
-            this.DBUTTON2.Name = "DBUTTON2";
-            this.DBUTTON2.Size = new System.Drawing.Size(150, 55);
-            this.DBUTTON2.TabIndex = 8;
-            this.DBUTTON2.Text = "SEND BITS";
-            this.DBUTTON2.UseVisualStyleBackColor = true;
-            this.DBUTTON2.Click += new System.EventHandler(this.DBUTTON2_Click);
-            // FileChoice
-            // 
-            this.FileChoice.Location = new System.Drawing.Point(26, 130);
-            this.FileChoice.Name = "FileChoice";
-            this.FileChoice.Size = new System.Drawing.Size(222, 25);
-            this.FileChoice.TabIndex = 7;
-            this.FileChoice.Text = "Выбрать файл";
-            this.FileChoice.UseVisualStyleBackColor = true;
-            this.FileChoice.Click += new System.EventHandler(this.FileChoice_Click);
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 10.25F);
+            this.label3.ForeColor = System.Drawing.Color.Red;
+            this.label3.Location = new System.Drawing.Point(12, 80);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(174, 17);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Соединение отсутствует";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(704, 353);
-            this.Controls.Add(this.DBUTTON2);
-            this.Controls.Add(this.DBUTTON1);
             this.ClientSize = new System.Drawing.Size(704, 313);
-            this.Controls.Add(this.FileChoice);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
@@ -144,11 +121,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label1;
 
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.Button DBUTTON1;
-        private System.Windows.Forms.Button DBUTTON2;
-
-        private System.Windows.Forms.Button FileChoice;
+        private System.ComponentModel.BackgroundWorker ConnectionWorker;
+        private System.Windows.Forms.Label label3;
     }
 }
 

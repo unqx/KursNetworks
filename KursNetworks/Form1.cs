@@ -14,11 +14,7 @@ namespace KursNetworks
 {
     public partial class Form1 : Form
     {
-
-        static string a;
-
-        static PhysLayer Layer = new PhysLayer();
-
+        public static bool connection = false;
         public Form1()
         {
             InitializeComponent();
@@ -26,16 +22,20 @@ namespace KursNetworks
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            ConnectionWorker.RunWorkerAsync();
         }
 
        
         private void textBox1_DoubleClick(object sender, EventArgs e)
         {
             if (PhysLayer.IsOpen())
-                textBox1.Text += PhysLayer.GetDataBits() + " " + PhysLayer.GetSpeed() + " / " + PhysLayer.GetPortName() + "\r\n";
+                textBox1.Text += PhysLayer.GetDataBits() + " " + PhysLayer.GetSpeed() + " / " + PhysLayer.GetPortName() + "\r\n" + Convert.ToString(PhysLayer.DsrSignal());
             else
+            {
                 textBox1.Text += "FALSE\r\n";
+                DataLink.filesAvailableRequest();
+            }
+
 
         }
 
@@ -68,27 +68,32 @@ namespace KursNetworks
 
         }
 
-        private void FileChoice_Click(object sender, EventArgs e)
+        private void ConnectionWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            OpenFileDialog search = new OpenFileDialog();
-            DialogResult result = search.ShowDialog();
+            while(true)
+            {
+                if (PhysLayer.DsrSignal())
+                {
+                    label3.Invoke((MethodInvoker)delegate
+                    {
+                        label3.Text = "Соединение активно";
+                        label3.ForeColor = Color.Green;
+                    });
+
+                }
+                else 
+                {
+                    label3.Invoke((MethodInvoker)delegate
+                    {
+                        label3.Text = "Соединение отсутствует";
+                        label3.ForeColor = Color.Red;
+                    });
+                }
+
+                System.Threading.Thread.Sleep(1000);
+            }
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            string a = PhysLayer.str;
-            var result = MessageBox.Show(a, "DATA", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
 
-        private void DBUTTON1_Click(object sender, EventArgs e)
-        {
-            if(!backgroundWorker1.IsBusy)
-                backgroundWorker1.RunWorkerAsync();
-        }
-
-        private void DBUTTON2_Click(object sender, EventArgs e)
-        {
-            PhysLayer.SendBits();
-        }
     }
 }
