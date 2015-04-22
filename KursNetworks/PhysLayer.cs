@@ -13,7 +13,6 @@ namespace KursNetworks
     {
         private static SerialPort serialPort = new SerialPort();
 
-        public static string str { get; set; }
 
         // Скан портов
         public static string[] scanPorts()
@@ -21,32 +20,11 @@ namespace KursNetworks
             return SerialPort.GetPortNames();
         }
 
-
-        // Чтение порта
-        public static void Listen(byte[] info)
+        public static bool DsrSignal()
         {
-                
-        }
-
-        public static byte[] ReadByteArrayFromFile(string fileName)
-        {
-            byte[] buff = null;
-            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            BinaryReader br = new BinaryReader(fs);
-            long numBytes = new FileInfo(fileName).Length;
-            buff = br.ReadBytes((int)numBytes);
-            return buff;
-        }
-
-
-        public static void SendBits()
-        {
-            if (IsOpen())
-            {
-                byte[] info = ReadByteArrayFromFile("C:\\Users\\Alex\\Desktop\\key.txt");
-                serialPort.Write(info, 0, 50);
-            }
-                
+            if(IsOpen())
+                return serialPort.DsrHolding;
+            return false;
         }
 
         public static void EstablishConnection(string name, int rate, int dataBits, StopBits S, Parity P)
@@ -56,10 +34,14 @@ namespace KursNetworks
             serialPort.DataBits = dataBits;
             serialPort.StopBits = S;
             serialPort.Parity = P;
+            serialPort.Handshake = Handshake.None;
+            serialPort.DtrEnable = true;
+            serialPort.RtsEnable = false;
+            serialPort.ReadTimeout = 500;
+            serialPort.WriteTimeout = 500;
 
             try
             {
-                serialPort.DataReceived += serialPort_DataReceived;
                 serialPort.Open();
             }
 
@@ -71,14 +53,6 @@ namespace KursNetworks
             }
             
         }
-
-        private static void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialPort sp = (SerialPort)sender;
-            string message = sp.ReadExisting();
-            var result = MessageBox.Show(message, "ATTENTION", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
 
         public static void DropConnection()
         {
