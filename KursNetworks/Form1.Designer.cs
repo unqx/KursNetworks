@@ -34,28 +34,31 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ConnectionWorker = new System.ComponentModel.BackgroundWorker();
             this.label3 = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.DownloadButton = new System.Windows.Forms.Button();
+            this.UpdateButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.Color.Black;
             this.textBox1.ForeColor = System.Drawing.Color.Chartreuse;
-            this.textBox1.Location = new System.Drawing.Point(337, 50);
+            this.textBox1.Location = new System.Drawing.Point(352, 25);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(355, 105);
+            this.textBox1.Size = new System.Drawing.Size(355, 460);
             this.textBox1.TabIndex = 0;
             this.textBox1.DoubleClick += new System.EventHandler(this.textBox1_DoubleClick);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(334, 34);
+            this.label2.Location = new System.Drawing.Point(349, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Dev Console";
+            this.label2.Text = "Console";
             // 
             // button2
             // 
@@ -94,12 +97,50 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Соединение отсутствует";
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Items.AddRange(new object[] {
+            "",
+            "asdfgdsg",
+            "basfdasd",
+            "cacsca"});
+            this.listBox1.Location = new System.Drawing.Point(15, 298);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(316, 121);
+            this.listBox1.Sorted = true;
+            this.listBox1.TabIndex = 8;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            // 
+            // DownloadButton
+            // 
+            this.DownloadButton.Location = new System.Drawing.Point(15, 425);
+            this.DownloadButton.Name = "DownloadButton";
+            this.DownloadButton.Size = new System.Drawing.Size(316, 60);
+            this.DownloadButton.TabIndex = 9;
+            this.DownloadButton.Text = "Скачать";
+            this.DownloadButton.UseVisualStyleBackColor = true;
+            // 
+            // UpdateButton
+            // 
+            this.UpdateButton.AllowDrop = true;
+            this.UpdateButton.Location = new System.Drawing.Point(15, 208);
+            this.UpdateButton.Name = "UpdateButton";
+            this.UpdateButton.Size = new System.Drawing.Size(316, 55);
+            this.UpdateButton.TabIndex = 10;
+            this.UpdateButton.Text = "Обновить доступные файлы";
+            this.UpdateButton.UseVisualStyleBackColor = true;
+            this.UpdateButton.Click += new System.EventHandler(this.UpdateButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(704, 313);
+            this.ClientSize = new System.Drawing.Size(719, 497);
+            this.Controls.Add(this.UpdateButton);
+            this.Controls.Add(this.DownloadButton);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
@@ -123,6 +164,9 @@
 
         private System.ComponentModel.BackgroundWorker ConnectionWorker;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button DownloadButton;
+        private System.Windows.Forms.Button UpdateButton;
     }
 }
 

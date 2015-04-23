@@ -11,36 +11,94 @@ namespace KursNetworks
 {
     class DataLink
     {
-        public static byte[] pack(byte type, byte[] info = null)
+        public static string[] files = null;
+        public static bool filesUpdated = false;
+
+        public static byte[] pack(char type, byte[] info = null)
         {
             switch (type)
             {
-                case 100:
+                case 'F':
                     {
                         List<byte> L = new List<byte>();
-                        L.Add(100);
-                        foreach(byte b in info )
+                        L.Add(Convert.ToByte(type));
+                        L.Add(Constants.BORDER);
+                        if (info != null)
                         {
-                            L.Add(b);
+                            foreach (byte b in info)
+                            {
+                                L.Add(b);
+                            }
                         }
-
+                       
+                        L.Add(Constants.BORDER);
                         return L.ToArray();
-                        
+                    }
+
+                case 'R':
+                    {
+                        byte[] arr = { Convert.ToByte(type) };
+                        return arr;
                     }
             }
 
             throw new Exception();
         }
-        public static void filesAvailableRequest()
+
+        public static void Analyze(byte[] recievedArray)
         {
-            byte[] a = { 2, 4, 8 };
-            a = pack(100, a);
-            string b = "";
-            for (int i = 0; i < a.Length; i++)
+            if (recievedArray[0] == Convert.ToByte('F'))
             {
-                b += Convert.ToString(a[i], 2) + " ";
+                if (recievedArray[1] == Constants.BORDER)
+                {
+                    List<byte> filesList = new List<byte>();
+                    for (int i = 2; recievedArray[i] != Constants.BORDER; i++)
+                    {
+                        filesList.Add(recievedArray[i]);
+                    }
+
+                    string fileString = Encoding.Default.GetString(filesList.ToArray());
+                    DataLink.files = fileString.Split('-');
+                    DataLink.filesUpdated = true;
+                }
             }
-            MessageBox.Show(b);
+
+            if (recievedArray[0] == Convert.ToByte('R'))
+            {
+                DataLink.SendAvailableFiles();
+            }
+        }
+
+        public static void RequestAvailableFiles()
+        {
+            byte[] a = pack('R');
+            PhysLayer.Write(a);
+        }
+
+        public static void SendAvailableFiles()
+        {
+            // список для имен файлов по байтам
+            List<byte> f = new List<byte>();
+
+            // достаем все файлы с рабочего стола
+            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); 
+            string[] files = Directory.GetFiles(desktop);
+
+            foreach (string str in files)
+            {
+                // делаем массив байтов для каждого файла
+                byte[] fBytes = Encoding.Default.GetBytes(Path.GetFileName(str) + "-");
+
+                //побайтово кладем в массив
+                foreach (byte b in fBytes)
+                {
+                    f.Add(b);
+                }
+            }
+            
+            byte[] a = pack('F', f.ToArray());
+            PhysLayer.Write(a);
+
         }
 
     }

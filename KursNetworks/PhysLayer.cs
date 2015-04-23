@@ -9,16 +9,9 @@ using System.IO;
 
 namespace KursNetworks
 {
-    class PhysLayer
+    static class PhysLayer
     {
         private static SerialPort serialPort = new SerialPort();
-
-
-        // Скан портов
-        public static string[] scanPorts()
-        {
-            return SerialPort.GetPortNames();
-        }
 
         public static bool DsrSignal()
         {
@@ -43,6 +36,7 @@ namespace KursNetworks
             try
             {
                 serialPort.Open();
+                serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived); 
             }
 
             catch(System.UnauthorizedAccessException)
@@ -54,6 +48,38 @@ namespace KursNetworks
             
         }
 
+        private static void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            List<byte> recievedList = new List<byte>();
+
+            while (serialPort.BytesToRead > 0)
+            {
+                byte a = Convert.ToByte(serialPort.ReadByte());
+                recievedList.Add(a);
+            }
+
+            byte[] recievedArray = recievedList.ToArray();
+            DataLink.Analyze(recievedArray);
+                
+        }
+
+
+        public static void Write(byte[] arr)
+        {
+            serialPort.Write(arr, 0, arr.Length);
+        }
+
+
+         /****************** Здесь изи функции ***********************/
+
+        // Скан портов
+        public static string[] scanPorts()
+        {
+            return SerialPort.GetPortNames();
+        }
+
+
+        // Дропнуть соединение
         public static void DropConnection()
         {
             serialPort.Close();
@@ -83,6 +109,7 @@ namespace KursNetworks
             return "";
         }
 
+        // Название порта
         public static string GetPortName()
         {
             if (IsOpen())
@@ -91,6 +118,7 @@ namespace KursNetworks
             return "";
         }
 
+        // Стоп-биты
         public static string GetStopBits()
         {
             if(IsOpen())
@@ -114,6 +142,7 @@ namespace KursNetworks
             return "";
         }
 
+        // хз
         public static string GetParity()
         {
             if(IsOpen())

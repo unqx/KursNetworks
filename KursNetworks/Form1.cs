@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
@@ -29,11 +29,13 @@ namespace KursNetworks
         private void textBox1_DoubleClick(object sender, EventArgs e)
         {
             if (PhysLayer.IsOpen())
+            {
                 textBox1.Text += PhysLayer.GetDataBits() + " " + PhysLayer.GetSpeed() + " / " + PhysLayer.GetPortName() + "\r\n" + Convert.ToString(PhysLayer.DsrSignal());
+            }
+                
             else
             {
                 textBox1.Text += "FALSE\r\n";
-                DataLink.filesAvailableRequest();
             }
 
 
@@ -80,6 +82,10 @@ namespace KursNetworks
                         label3.ForeColor = Color.Green;
                     });
 
+                    UpdateButton.Invoke((MethodInvoker)delegate
+                    {
+                        UpdateButton.Enabled = true;
+                    });
                 }
                 else 
                 {
@@ -88,12 +94,43 @@ namespace KursNetworks
                         label3.Text = "Соединение отсутствует";
                         label3.ForeColor = Color.Red;
                     });
+
+                    UpdateButton.Invoke((MethodInvoker)delegate
+                    {
+                        UpdateButton.Enabled = false;
+                    });
                 }
 
                 System.Threading.Thread.Sleep(1000);
             }
         }
 
+        private void UpdateButton_Click(object sender, EventArgs e)
+        {
+            DataLink.RequestAvailableFiles();
+            ChangeFilenames();
+        }
+
+        private void ChangeFilenames()
+        {
+            listBox1.Items.Clear();
+            textBox1.Text += "\r\nLoading files...";
+            while (DataLink.filesUpdated != true)
+            {
+                textBox1.Text += ".";
+                Thread.Sleep(50);
+
+            }
+            textBox1.Text += "\r\n";
+            listBox1.Items.AddRange(DataLink.files);
+            DataLink.filesUpdated = false;
+           
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
 
     }
 }
