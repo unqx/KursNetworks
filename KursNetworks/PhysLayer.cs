@@ -45,6 +45,13 @@ namespace KursNetworks
                 const string caption = "Ошибка";
                 var result = MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            catch(System.IO.IOException)
+            {
+                const string message = "Параметры выбраны неверно!\r\nПопробуйте выбрать другие стоп-биты!";
+                const string caption = "Ошибка";
+                var result = MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             
         }
 

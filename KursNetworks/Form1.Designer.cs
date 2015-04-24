@@ -43,18 +43,18 @@
             // 
             this.textBox1.BackColor = System.Drawing.Color.Black;
             this.textBox1.ForeColor = System.Drawing.Color.Chartreuse;
-            this.textBox1.Location = new System.Drawing.Point(352, 25);
+            this.textBox1.Location = new System.Drawing.Point(445, 157);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(355, 460);
+            this.textBox1.Size = new System.Drawing.Size(642, 152);
             this.textBox1.TabIndex = 0;
             this.textBox1.DoubleClick += new System.EventHandler(this.textBox1_DoubleClick);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(349, 9);
+            this.label2.Location = new System.Drawing.Point(442, 141);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 4;
@@ -100,12 +100,7 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "",
-            "asdfgdsg",
-            "basfdasd",
-            "cacsca"});
-            this.listBox1.Location = new System.Drawing.Point(15, 298);
+            this.listBox1.Location = new System.Drawing.Point(15, 228);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(316, 121);
             this.listBox1.Sorted = true;
@@ -114,7 +109,7 @@
             // 
             // DownloadButton
             // 
-            this.DownloadButton.Location = new System.Drawing.Point(15, 425);
+            this.DownloadButton.Location = new System.Drawing.Point(15, 375);
             this.DownloadButton.Name = "DownloadButton";
             this.DownloadButton.Size = new System.Drawing.Size(316, 60);
             this.DownloadButton.TabIndex = 9;
@@ -124,7 +119,7 @@
             // UpdateButton
             // 
             this.UpdateButton.AllowDrop = true;
-            this.UpdateButton.Location = new System.Drawing.Point(15, 208);
+            this.UpdateButton.Location = new System.Drawing.Point(15, 167);
             this.UpdateButton.Name = "UpdateButton";
             this.UpdateButton.Size = new System.Drawing.Size(316, 55);
             this.UpdateButton.TabIndex = 10;
@@ -137,16 +132,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(719, 497);
+            this.ClientSize = new System.Drawing.Size(1160, 539);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.UpdateButton);
             this.Controls.Add(this.DownloadButton);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.Text = "Skype";
             this.Load += new System.EventHandler(this.Form1_Load);

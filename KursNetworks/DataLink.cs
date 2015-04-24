@@ -52,8 +52,10 @@ namespace KursNetworks
                 if (recievedArray[1] == Constants.BORDER)
                 {
                     List<byte> filesList = new List<byte>();
-                    for (int i = 2; recievedArray[i] != Constants.BORDER; i++)
+                    for (int i = 2; i < recievedArray.Length; i++)
                     {
+                        if (recievedArray[i] == Constants.BORDER)
+                            break;
                         filesList.Add(recievedArray[i]);
                     }
 

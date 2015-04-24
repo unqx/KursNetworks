@@ -95,7 +95,7 @@ namespace KursNetworks
                     break;
                 }
             }
-
+            
             // Выбор значения четности
             Parity P = new Parity();
             switch (EvenBox.SelectedIndex)
