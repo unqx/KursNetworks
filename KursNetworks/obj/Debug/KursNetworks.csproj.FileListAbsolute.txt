@@ -28,3 +28,13 @@ C:\Users\Ирина\Desktop\KursNetworks\KursNetworks\obj\Debug\KursNetworks.Con
 C:\Users\Ирина\Desktop\KursNetworks\KursNetworks\obj\Debug\KursNetworks.Form1.resources
 C:\Users\Ирина\Desktop\KursNetworks\KursNetworks\obj\Debug\KursNetworks.Properties.Resources.resources
 C:\Users\Ирина\Desktop\KursNetworks\KursNetworks\obj\Debug\KursNetworks.csproj.GenerateResource.Cache
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\bin\Debug\KursNetworks.exe.config
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.exe
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.pdb
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\bin\Debug\KursNetworks.exe
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\bin\Debug\KursNetworks.pdb
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.csprojResolveAssemblyReference.cache
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.ConnectionSettings.resources
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.Form1.resources
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.Properties.Resources.resources
+C:\Users\Alexander\Desktop\Курсач\KursNetworks\obj\Debug\KursNetworks.csproj.GenerateResource.Cache
