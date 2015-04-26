@@ -12,6 +12,7 @@ namespace KursNetworks
     static class PhysLayer
     {
         private static SerialPort serialPort = new SerialPort();
+        public static string PortReciever = "";
 
         public static bool DsrSignal()
         {
@@ -20,7 +21,7 @@ namespace KursNetworks
             return false;
         }
 
-        public static void EstablishConnection(string name, int rate, int dataBits, StopBits S, Parity P)
+        public static void OpenPort(string name, int rate, int dataBits, StopBits S, Parity P)
         {
             serialPort.PortName = name;
             serialPort.BaudRate = rate;
@@ -36,7 +37,7 @@ namespace KursNetworks
             try
             {
                 serialPort.Open();
-                serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived); 
+                serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
             }
 
             catch(System.UnauthorizedAccessException)
@@ -66,7 +67,9 @@ namespace KursNetworks
             }
 
             byte[] recievedArray = recievedList.ToArray();
-            DataLink.Analyze(recievedArray);
+            //MessageBox.Show("SENDING ARRAY: " + Encoding.Default.GetString(recievedArray));
+            if(recievedArray.Length != 0)
+                DataLink.Analyze(recievedArray);
                 
         }
 
@@ -89,6 +92,7 @@ namespace KursNetworks
         // Дропнуть соединение
         public static void DropConnection()
         {
+            serialPort.DataReceived -= new SerialDataReceivedEventHandler(serialPort_DataReceived);
             serialPort.Close();
         }
 

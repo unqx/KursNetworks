@@ -117,7 +117,7 @@ namespace KursNetworks
                     }
             }
 
-            PhysLayer.EstablishConnection(name, rate, dataBits, S, P);
+            PhysLayer.OpenPort(name, rate, dataBits, S, P);
 
             if(PhysLayer.IsOpen())
             {

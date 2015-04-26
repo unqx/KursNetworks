@@ -52,7 +52,6 @@ namespace KursNetworks
             // Чисто для прикола)))
             if (PhysLayer.IsOpen())
             {
-                label1.Text = "Подключен к порту " + PhysLayer.GetPortName();
                 if (!prev)
                     textBox1.Text += "Etsablished connection via " + PhysLayer.GetPortName() + " with parameters: speed = " + PhysLayer.GetSpeed() + "\r\n";
                 textBox1.SelectionStart = textBox1.TextLength;
@@ -61,7 +60,6 @@ namespace KursNetworks
             
             else
             {
-                label1.Text = "Нет подключения к COM-порту!";
                 if(prev)
                     textBox1.Text += "Connection via " + port + " was dropped.\r\n";
                 textBox1.SelectionStart = textBox1.TextLength;
@@ -86,6 +84,23 @@ namespace KursNetworks
                     {
                         UpdateButton.Enabled = true;
                     });
+
+                    // Если есть соединение логическое, то пишем название порта к которому подключены
+                    if (PhysLayer.PortReciever != "" && DataLink.Connection)
+                    {
+                        label1.Invoke((MethodInvoker)delegate
+                        {
+                            label1.Text = "Подключение через " + PhysLayer.GetPortName() + " к " + PhysLayer.PortReciever;
+                        });
+                    }
+                    else
+                    {
+                        if (!DataLink.Connection)
+                        {
+                            DataLink.EstablishConnection();
+                            DataLink.Connection = true;
+                        }
+                    }
                 }
                 else 
                 {
@@ -99,7 +114,19 @@ namespace KursNetworks
                     {
                         UpdateButton.Enabled = false;
                     });
-                }
+
+                    label1.Invoke((MethodInvoker)delegate
+                    {
+                        if (PhysLayer.IsOpen())
+                            label1.Text = "Подключен к порту " + PhysLayer.GetPortName();
+                        else
+                            label1.Text = "Порт закрыт";
+
+                    });
+
+                    DataLink.Connection = false;
+                    PhysLayer.PortReciever = "";
+                 }
 
                 System.Threading.Thread.Sleep(1000);
             }
@@ -130,6 +157,24 @@ namespace KursNetworks
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void DownloadButton_Click(object sender, EventArgs e)
+        {
+            byte a = 5;
+            byte b = Hamming.Code(a);
+            MessageBox.Show(Convert.ToString(a, 2).PadLeft(8, '0'));
+            MessageBox.Show(Convert.ToString(b, 2).PadLeft(8, '0'));
+            try
+            {
+               b = Hamming.Decode(b);
+            }
+
+            catch(Exception)
+            {
+                MessageBox.Show("NE MOGU DECODE SDELAT BRATISHKA");
+            }
+            MessageBox.Show(Convert.ToString(b, 2).PadLeft(8, '0'));
         }
 
     }

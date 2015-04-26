@@ -43,18 +43,18 @@
             // 
             this.textBox1.BackColor = System.Drawing.Color.Black;
             this.textBox1.ForeColor = System.Drawing.Color.Chartreuse;
-            this.textBox1.Location = new System.Drawing.Point(445, 157);
+            this.textBox1.Location = new System.Drawing.Point(337, 80);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(642, 152);
+            this.textBox1.Size = new System.Drawing.Size(248, 355);
             this.textBox1.TabIndex = 0;
             this.textBox1.DoubleClick += new System.EventHandler(this.textBox1_DoubleClick);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(442, 141);
+            this.label2.Location = new System.Drawing.Point(334, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 4;
@@ -115,6 +115,7 @@
             this.DownloadButton.TabIndex = 9;
             this.DownloadButton.Text = "Скачать";
             this.DownloadButton.UseVisualStyleBackColor = true;
+            this.DownloadButton.Click += new System.EventHandler(this.DownloadButton_Click);
             // 
             // UpdateButton
             // 
@@ -132,7 +133,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1160, 539);
+            this.ClientSize = new System.Drawing.Size(603, 443);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.UpdateButton);
