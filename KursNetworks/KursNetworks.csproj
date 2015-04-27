@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="DataLink.cs" />
+    <Compile Include="File.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

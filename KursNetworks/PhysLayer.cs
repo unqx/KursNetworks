@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace KursNetworks
     {
         private static SerialPort serialPort = new SerialPort();
         public static string PortReciever = "";
+
+        public static ConcurrentQueue<byte[]> FramesRecieved = new ConcurrentQueue<byte[]>();
+        public static ConcurrentQueue<byte> Responses = new ConcurrentQueue<byte>();
 
         public static bool DsrSignal()
         {
@@ -67,7 +71,6 @@ namespace KursNetworks
             }
 
             byte[] recievedArray = recievedList.ToArray();
-            //MessageBox.Show("SENDING ARRAY: " + Encoding.Default.GetString(recievedArray));
             if(recievedArray.Length != 0)
                 DataLink.Analyze(recievedArray);
                 

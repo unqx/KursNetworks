@@ -23,6 +23,8 @@ namespace KursNetworks
         private void Form1_Load(object sender, EventArgs e)
         {
             ConnectionWorker.RunWorkerAsync();
+            TransmittingWorker.RunWorkerAsync();
+            DownloadButton.Enabled = false;
         }
 
        
@@ -82,7 +84,10 @@ namespace KursNetworks
 
                     UpdateButton.Invoke((MethodInvoker)delegate
                     {
-                        UpdateButton.Enabled = true;
+                        if (!DataLink.FileRecieving && !DataLink.FileSending)
+                            UpdateButton.Enabled = true;
+                        else
+                            UpdateButton.Enabled = false;
                     });
 
                     // Если есть соединение логическое, то пишем название порта к которому подключены
@@ -95,6 +100,11 @@ namespace KursNetworks
                     }
                     else
                     {
+                        label1.Invoke((MethodInvoker)delegate
+                        {
+                            label1.Text = "Подключен к порту " + PhysLayer.GetPortName();
+                        });
+
                         if (!DataLink.Connection)
                         {
                             DataLink.EstablishConnection();
@@ -140,41 +150,195 @@ namespace KursNetworks
 
         private void ChangeFilenames()
         {
+            // Запускаем в основном потоке, т.к. не занимает много времени.
             listBox1.Items.Clear();
             textBox1.Text += "\r\nLoading files...";
+            int i = 0;
+
+            // Даем время отработать ком портам
             while (DataLink.filesUpdated != true)
             {
+                ++i;
                 textBox1.Text += ".";
                 Thread.Sleep(50);
+                if(i == 10)
+                    break;
 
             }
             textBox1.Text += "\r\n";
-            listBox1.Items.AddRange(DataLink.files);
-            DataLink.filesUpdated = false;
-           
+
+            //Если быбла ошибка, то выводим messagebox
+            if (DataLink.filesUpdated)
+            {
+                listBox1.Items.AddRange(DataLink.files);
+                DataLink.filesUpdated = false;
+            }
+            else
+                MessageBox.Show("Не удалось обновить список файлов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            if (listBox1.Text != "")
+                DownloadButton.Enabled = true;
+            else
+                DownloadButton.Enabled = false;
         }
 
         private void DownloadButton_Click(object sender, EventArgs e)
         {
-            byte a = 5;
-            byte b = Hamming.Code(a);
-            MessageBox.Show(Convert.ToString(a, 2).PadLeft(8, '0'));
-            MessageBox.Show(Convert.ToString(b, 2).PadLeft(8, '0'));
-            try
+            DataLink.FileRecieving = true;
+            DataLink.FileRecievingName = listBox1.Text;
+            DataLink.DownloadRequest(listBox1.Text);
+        }
+
+        private void TransmittingWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
             {
-               b = Hamming.Decode(b);
+                if (!DataLink.FileSending && !DataLink.FileRecieving)
+                {
+                    if (!DataLink.SendQueue.IsEmpty)
+                    {
+                        File F;
+                        if (DataLink.SendQueue.TryDequeue(out F))
+                        {
+                            DataLink.FileSending = true;
+                            DataLink.StartSendingFile(F);
+
+                            /****** установка прогресс-бара ******/
+
+                            progressBar1.Invoke((MethodInvoker)delegate
+                            {
+                                progressBar1.Maximum = (int)(F.Size / 1024);
+                            });
+
+                            /**************************************/
+
+                            FileStream Stream = new FileStream(F.Name, FileMode.Open, FileAccess.Read);
+                            byte R;
+                            byte[] buffer = new byte[1024];
+                            
+                            int counter = 0; // счетчик ошибок
+
+                            while(DataLink.FileSending)
+                            {
+                                if(PhysLayer.Responses.TryDequeue(out R))
+                                {
+                                    if (R == Convert.ToByte('A'))
+                                    {
+                                        counter = 0;
+                                        try
+                                        {
+                                            int BytesRead = Stream.Read(buffer, 0, buffer.Length);
+                                            if (BytesRead > 0)
+                                            {
+                                                byte[] clean = new byte[BytesRead];
+                                                for (int i = 0; i < BytesRead; i++ )
+                                                {
+                                                    clean[i] = buffer[i];
+                                                }
+
+                                                int step = clean.Length;
+
+                                                clean = DataLink.pack('I', clean);
+                                                clean = DataLink.EncodeFrame(clean);
+                                                PhysLayer.Write(clean);
+
+                                                progressBar1.Invoke((MethodInvoker)delegate
+                                                {
+                                                    progressBar1.Step = step / 1024;
+                                                    progressBar1.PerformStep();
+                                                });
+                                            }
+ 
+                                            else
+                                            {
+                                                Stream.Close();
+                                                DataLink.EOF();
+                                                DataLink.FileSending = false;
+
+                                                progressBar1.Invoke((MethodInvoker)delegate
+                                                {
+                                                    progressBar1.Value = 0;
+                                                });
+                                            }
+                                        }
+
+                                        catch(ArgumentException)
+                                        {
+                                            MessageBox.Show("ISKLUCHENIE");
+                                        }
+                                       
+                                    }
+
+                                     if (R == Convert.ToByte('N'))
+                                     {
+                                         counter++;
+                                         PhysLayer.Write(buffer);
+                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (DataLink.FileRecieving)
+                {
+                    string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    string fullPath = desktop + "\\(NEW)" + DataLink.FileRecievingName;
+
+                    FileStream Stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                    MessageBox.Show(Convert.ToString(DataLink.FileRecievingSize), "SUKA!", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand);
+
+                    progressBar1.Invoke((MethodInvoker)delegate
+                    {
+                        progressBar1.Maximum = DataLink.FileRecievingSize / 1024;
+
+                    });
+
+                    while(true)
+                    {
+                        byte[] result;
+                        if(PhysLayer.FramesRecieved.TryDequeue(out result))
+                        {
+                            if(Encoding.Default.GetString(result) == "EOF")
+                            {
+                                Stream.Close();
+                                DataLink.FileRecieving = false;
+
+                                progressBar1.Invoke((MethodInvoker)delegate
+                                {
+                                    progressBar1.Value = 0;
+                                });
+
+                                break;
+                            }
+
+                            try
+                            {
+                                Stream.Write(result, 0, result.Length);
+
+                                progressBar1.Invoke((MethodInvoker)delegate
+                                {
+                                    progressBar1.Step = result.Length / 1024;
+                                    progressBar1.PerformStep();
+                                });
+                            }
+
+                            catch(IOException)
+                            {
+                                MessageBox.Show("NEKUDA PISAT'");
+                            }
+                           
+                        }
+                    }
+                }
+
+                Thread.Sleep(1000);
+             
             }
 
-            catch(Exception)
-            {
-                MessageBox.Show("NE MOGU DECODE SDELAT BRATISHKA");
-            }
-            MessageBox.Show(Convert.ToString(b, 2).PadLeft(8, '0'));
         }
 
     }
