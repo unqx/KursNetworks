@@ -90,6 +90,12 @@ namespace KursNetworks
                             UpdateButton.Enabled = false;
                     });
 
+                    ActionLabel.Invoke((MethodInvoker)delegate
+                    {
+                        if (!DataLink.FileRecieving && !DataLink.FileSending)
+                            ActionLabel.Text = "";
+                    });
+
                     // Если есть соединение логическое, то пишем название порта к которому подключены
                     if (PhysLayer.PortReciever != "" && DataLink.Connection)
                     {
@@ -134,6 +140,16 @@ namespace KursNetworks
 
                     });
 
+                    progressBar1.Invoke((MethodInvoker)delegate 
+                    {
+                        progressBar1.Value = 0;
+                    });
+
+                    ActionLabel.Invoke((MethodInvoker)delegate
+                    {
+                        ActionLabel.Text = "";
+                    });
+
                     DataLink.Connection = false;
                     PhysLayer.PortReciever = "";
                  }
@@ -144,6 +160,7 @@ namespace KursNetworks
 
         private void UpdateButton_Click(object sender, EventArgs e)
         {
+            DownloadButton.Enabled = false;
             DataLink.RequestAvailableFiles();
             ChangeFilenames();
         }
@@ -187,9 +204,14 @@ namespace KursNetworks
 
         private void DownloadButton_Click(object sender, EventArgs e)
         {
-            DataLink.FileRecieving = true;
-            DataLink.FileRecievingName = listBox1.Text;
-            DataLink.DownloadRequest(listBox1.Text);
+            if(PhysLayer.DsrSignal())
+            {
+                DataLink.FileRecieving = true;
+                ActionLabel.Text = "Идет загрузка файла...";
+                DataLink.FileRecievingName = listBox1.Text;
+                DataLink.DownloadRequest(listBox1.Text);
+            }
+           
         }
 
         private void TransmittingWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -206,11 +228,16 @@ namespace KursNetworks
                             DataLink.FileSending = true;
                             DataLink.StartSendingFile(F);
 
-                            /****** установка прогресс-бара ******/
+                            /****** установка элементов формы ******/
 
                             progressBar1.Invoke((MethodInvoker)delegate
                             {
                                 progressBar1.Maximum = (int)(F.Size / 1024);
+                            });
+
+                            ActionLabel.Invoke((MethodInvoker)delegate
+                            {
+                                ActionLabel.Text = "Идет передача файла...";
                             });
 
                             /**************************************/
@@ -223,6 +250,13 @@ namespace KursNetworks
 
                             while(DataLink.FileSending)
                             {
+                                if (!PhysLayer.DsrSignal())
+                                {
+                                    Stream.Close();
+                                    MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    PhysLayer.ShutDown();
+                                }
+
                                 if(PhysLayer.Responses.TryDequeue(out R))
                                 {
                                     if (R == Convert.ToByte('A'))
@@ -262,6 +296,11 @@ namespace KursNetworks
                                                 {
                                                     progressBar1.Value = 0;
                                                 });
+
+                                                ActionLabel.Invoke((MethodInvoker)delegate
+                                                {
+                                                    ActionLabel.Text = "";
+                                                });
                                             }
                                         }
 
@@ -274,8 +313,19 @@ namespace KursNetworks
 
                                      if (R == Convert.ToByte('N'))
                                      {
-                                         counter++;
-                                         PhysLayer.Write(buffer);
+                                         if (counter < 5)
+                                         {
+                                             counter++;
+                                             PhysLayer.Write(buffer);
+                                         }
+
+                                         else
+                                         {
+                                             MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                             PhysLayer.ShutDown();
+                                         }
+
                                      }
                                 }
                             }
@@ -289,16 +339,22 @@ namespace KursNetworks
                     string fullPath = desktop + "\\(NEW)" + DataLink.FileRecievingName;
 
                     FileStream Stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                    MessageBox.Show(Convert.ToString(DataLink.FileRecievingSize), "SUKA!", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand);
+                    Convert.ToString(DataLink.FileRecievingSize);
 
                     progressBar1.Invoke((MethodInvoker)delegate
                     {
                         progressBar1.Maximum = DataLink.FileRecievingSize / 1024;
-
                     });
 
-                    while(true)
+                    while(DataLink.FileRecieving)
                     {
+                        if(!PhysLayer.DsrSignal())
+                        {
+                            Stream.Close();
+                            System.IO.File.Delete(fullPath);
+                            MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            PhysLayer.ShutDown();
+                        }
                         byte[] result;
                         if(PhysLayer.FramesRecieved.TryDequeue(out result))
                         {
@@ -315,6 +371,23 @@ namespace KursNetworks
                                 break;
                             }
 
+                            if (Encoding.Default.GetString(result) == "FNF")
+                            {
+                                Stream.Close();
+                                System.IO.File.Delete(fullPath);
+
+                                progressBar1.Invoke((MethodInvoker)delegate
+                                {
+                                    progressBar1.Value = 0;
+                                });
+
+                                PhysLayer.ShutDown();
+                                MessageBox.Show("Файл не найден.\r\nВыберите другой файл.", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                              
+                                break;
+
+                            }
+
                             try
                             {
                                 Stream.Write(result, 0, result.Length);
@@ -328,11 +401,20 @@ namespace KursNetworks
 
                             catch(IOException)
                             {
-                                MessageBox.Show("NEKUDA PISAT'");
+                                MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                PhysLayer.ShutDown();
+
+                                progressBar1.Invoke((MethodInvoker)delegate
+                                {
+                                    progressBar1.Value = 0;
+                                });
                             }
                            
                         }
                     }
+
+                    Stream.Close();
+                    PhysLayer.ShutDown();
                 }
 
                 Thread.Sleep(1000);

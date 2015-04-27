@@ -32,6 +32,7 @@ namespace KursNetworks
             {
                 case 'I':
                 case 'Z':
+                case 'X':
                     {
                         List<byte> L = new List<byte>();
                         L.Add(Convert.ToByte(type));
@@ -182,7 +183,6 @@ namespace KursNetworks
 
                             else
                             {
-                                MessageBox.Show("NE NAIDENO");
                                 FileNotFound();
                             }
                             
@@ -233,7 +233,7 @@ namespace KursNetworks
                     ACK();
                 }
 
-                if (recievedArray[0] == Convert.ToByte('Z'))
+                if (recievedArray[0] == Convert.ToByte('Z') || recievedArray[0] == Convert.ToByte('X'))
                 {
                     List<byte> InfoBytes = new List<byte>();
 
@@ -344,7 +344,10 @@ namespace KursNetworks
 
         public static void FileNotFound()
         {
-
+            byte[] fnf = Encoding.Default.GetBytes("FNF");
+            fnf = pack('X', fnf);
+            fnf = EncodeFrame(fnf);
+            PhysLayer.Write(fnf);
         }
 
         public static void ACK()

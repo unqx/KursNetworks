@@ -96,7 +96,19 @@ namespace KursNetworks
         public static void DropConnection()
         {
             serialPort.DataReceived -= new SerialDataReceivedEventHandler(serialPort_DataReceived);
+            if(DataLink.FileRecieving || DataLink.FileSending)
+                MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            PhysLayer.ShutDown();
             serialPort.Close();
+        }
+
+        public static void ShutDown()
+        {
+            DataLink.FileRecieving = false;
+            DataLink.FileSending = false;
+            PhysLayer.FramesRecieved = new ConcurrentQueue<byte[]>();
+            PhysLayer.Responses = new ConcurrentQueue<byte>();
+            DataLink.SendQueue = new ConcurrentQueue<File>();
         }
 
         // Открыт порт?
