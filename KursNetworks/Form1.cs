@@ -339,12 +339,6 @@ namespace KursNetworks
                     string fullPath = desktop + "\\(NEW)" + DataLink.FileRecievingName;
 
                     FileStream Stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                    Convert.ToString(DataLink.FileRecievingSize);
-
-                    progressBar1.Invoke((MethodInvoker)delegate
-                    {
-                        progressBar1.Maximum = DataLink.FileRecievingSize / 1024;
-                    });
 
                     while(DataLink.FileRecieving)
                     {
@@ -355,7 +349,9 @@ namespace KursNetworks
                             MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             PhysLayer.ShutDown();
                         }
+
                         byte[] result;
+
                         if(PhysLayer.FramesRecieved.TryDequeue(out result))
                         {
                             if(Encoding.Default.GetString(result) == "EOF")
@@ -388,27 +384,40 @@ namespace KursNetworks
 
                             }
 
-                            try
+                            if(Encoding.Default.GetString(result) == "SIZE")
                             {
-                                Stream.Write(result, 0, result.Length);
-
                                 progressBar1.Invoke((MethodInvoker)delegate
                                 {
-                                    progressBar1.Step = result.Length / 1024;
-                                    progressBar1.PerformStep();
+                                    progressBar1.Maximum = DataLink.FileRecievingSize / 1024;
                                 });
+
                             }
 
-                            catch(IOException)
+                            else
                             {
-                                MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                PhysLayer.ShutDown();
-
-                                progressBar1.Invoke((MethodInvoker)delegate
+                                try
                                 {
-                                    progressBar1.Value = 0;
-                                });
+                                    Stream.Write(result, 0, result.Length);
+
+                                    progressBar1.Invoke((MethodInvoker)delegate
+                                    {
+                                        progressBar1.Step = result.Length / 1024;
+                                        progressBar1.PerformStep();
+                                    });
+                                }
+
+                                catch (IOException)
+                                {
+                                    MessageBox.Show("Ошибка передачи!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    PhysLayer.ShutDown();
+
+                                    progressBar1.Invoke((MethodInvoker)delegate
+                                    {
+                                        progressBar1.Value = 0;
+                                    });
+                                }
                             }
+                           
                            
                         }
                     }

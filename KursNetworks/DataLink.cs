@@ -209,7 +209,8 @@ namespace KursNetworks
 
                         string Size = Encoding.Default.GetString(SizeBytes.ToArray());
                         DataLink.FileRecievingSize = Convert.ToInt32(Size);
-                        DataLink.FileRecieving = true;
+
+                        PhysLayer.FramesRecieved.Enqueue(Encoding.Default.GetBytes("SIZE"));
                         ACK();
                     }
                 }
