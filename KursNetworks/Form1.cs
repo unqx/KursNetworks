@@ -196,10 +196,14 @@ namespace KursNetworks
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.Text != "")
-                DownloadButton.Enabled = true;
-            else
-                DownloadButton.Enabled = false;
+            if(!DataLink.FileRecieving && !DataLink.FileSending)
+            {
+                if (listBox1.Text != "")
+                    DownloadButton.Enabled = true;
+                else
+                    DownloadButton.Enabled = false;
+            }
+
         }
 
         private void DownloadButton_Click(object sender, EventArgs e)
@@ -211,7 +215,7 @@ namespace KursNetworks
                 DataLink.FileRecievingName = listBox1.Text;
                 DataLink.DownloadRequest(listBox1.Text);
             }
-           
+ 
         }
 
         private void TransmittingWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -229,6 +233,11 @@ namespace KursNetworks
                             DataLink.StartSendingFile(F);
 
                             /****** установка элементов формы ******/
+
+                            DownloadButton.Invoke((MethodInvoker)delegate
+                            {
+                                DownloadButton.Enabled = false;
+                            });
 
                             progressBar1.Invoke((MethodInvoker)delegate
                             {
@@ -335,6 +344,11 @@ namespace KursNetworks
 
                 if (DataLink.FileRecieving)
                 {
+                    DownloadButton.Invoke((MethodInvoker)delegate
+                    {
+                        DownloadButton.Enabled = false;
+                    });
+
                     string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                     string fullPath = desktop + "\\(NEW)" + DataLink.FileRecievingName;
 
@@ -426,9 +440,16 @@ namespace KursNetworks
                     PhysLayer.ShutDown();
                 }
 
+                DownloadButton.Invoke((MethodInvoker)delegate
+                {
+                    if(listBox1.Text != "")
+                        DownloadButton.Enabled = true;
+                });
+
                 Thread.Sleep(1000);
-             
             }
+
+
 
         }
 

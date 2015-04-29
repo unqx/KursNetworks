@@ -128,7 +128,7 @@ namespace KursNetworks
                         }
 
                         string fileString = Encoding.Default.GetString(filesList.ToArray());
-                        DataLink.files = fileString.Split('-');
+                        DataLink.files = fileString.Split('?');
                         DataLink.filesUpdated = true;
                     }
                 }
@@ -276,7 +276,7 @@ namespace KursNetworks
             foreach (string str in files)
             {
                 // делаем массив байтов для каждого файла
-                byte[] fBytes = Encoding.Default.GetBytes(Path.GetFileName(str) + "-");
+                byte[] fBytes = Encoding.Default.GetBytes(Path.GetFileName(str) + "?");
 
                 //побайтово кладем в массив
                 foreach (byte b in fBytes)

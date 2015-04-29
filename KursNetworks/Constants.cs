@@ -8,6 +8,6 @@ namespace KursNetworks
 {
     class Constants
     {
-        public const byte BORDER = 255;
+        public const byte BORDER = 124;
     }
 }
