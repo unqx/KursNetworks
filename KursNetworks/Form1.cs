@@ -310,6 +310,8 @@ namespace KursNetworks
                                                 {
                                                     ActionLabel.Text = "";
                                                 });
+
+                                                MessageBox.Show("Передача файла завершена!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.None);
                                             }
                                         }
 
@@ -372,6 +374,8 @@ namespace KursNetworks
                             {
                                 Stream.Close();
                                 DataLink.FileRecieving = false;
+
+                                MessageBox.Show("Прием файла завершен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.None);
 
                                 progressBar1.Invoke((MethodInvoker)delegate
                                 {
